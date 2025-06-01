@@ -200,11 +200,49 @@ balulito
 
 ### Enumeración como balulito
 
-Como usuario `balulito`, realizamos enumeración adicional pero no encontramos vectores obvios de escalada de privilegios:
+Como usuario `balulito`, realizamos enumeración adicional buscando vectores de escalada de privilegios:
 
-- No hay archivos SUID interesantes
-- No hay capabilities especiales
-- No hay servicios vulnerables ejecutándose como root
+#### Búsqueda de archivos SUID
+
+```bash
+find / -perm -4000 -type f 2>/dev/null
+```
+
+**Resultado:**
+```
+/tmp/bashroot
+/usr/bin/umount
+/usr/bin/chfn
+/usr/bin/su
+/usr/bin/newgrp
+/usr/bin/passwd
+/usr/bin/gpasswd
+/usr/bin/chsh
+/usr/bin/mount
+/usr/bin/sudo
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+/usr/lib/openssh/ssh-keysign
+```
+
+Los archivos SUID encontrados son los estándar del sistema. El archivo `/tmp/bashroot` fue resultado de intentos previos pero no tiene permisos útiles.
+
+#### Búsqueda de capabilities
+
+```bash
+getcap -r / 2>/dev/null
+```
+
+**Resultado:** *(Sin output - no hay capabilities especiales configuradas)*
+
+#### Verificación de servicios como root
+
+```bash
+netstat -tunlp 2>/dev/null | grep root
+```
+
+**Resultado:** *(Sin output - no hay servicios ejecutándose como root que podamos explotar)*
+
+Al no encontrar vectores obvios de escalada, decidimos probar reutilización de credenciales.
 
 ---
 
