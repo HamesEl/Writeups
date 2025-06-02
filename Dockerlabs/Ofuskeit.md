@@ -1,7 +1,7 @@
 # DockerLabs - Ofuskeit Machine Writeup
 
 **Máquina:** Ofuskeit  
-**Dificultad:** Media  
+**Dificultad:** Fácil-Media  
 **Plataforma:** DockerLabs  
 **Fecha:** Junio 2025  
 
@@ -242,7 +242,33 @@ netstat -tunlp 2>/dev/null | grep root
 
 **Resultado:** *(Sin output - no hay servicios ejecutándose como root que podamos explotar)*
 
-Al no encontrar vectores obvios de escalada, decidimos probar reutilización de credenciales.
+#### Revisión de archivos de configuración
+
+Explorando el directorio `/var/www/html`, encontramos un repositorio git:
+
+```bash
+cat /var/www/html/.git/config
+```
+
+**Resultado:**
+```ini
+[user]
+    name = balulito
+    email = admin@empresa.com
+    password = 'this is top secret'
+```
+
+Encontramos una contraseña potencial: `this is top secret`. Probamos esta credencial para escalar a root:
+
+```bash
+su root
+```
+
+**Password:** `this is top secret`
+
+❌ **La contraseña no funciona**
+
+Al no encontrar vectores obvios de escalada y fallar con la contraseña encontrada en git, decidimos probar reutilización de credenciales.
 
 ---
 
