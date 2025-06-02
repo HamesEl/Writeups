@@ -1,7 +1,7 @@
 # DockerLabs - Ofuskeit Machine Writeup
 
 **Máquina:** Ofuskeit  
-**Dificultad:** Fácil-Media  
+**Dificultad:** Media  
 **Plataforma:** DockerLabs  
 **Fecha:** Junio 2025  
 
